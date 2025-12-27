@@ -15,38 +15,41 @@ import {
     GoogleSignin,
     GoogleSigninButton,
     statusCodes,
-} from '@react-native-google-signin/google-signin';
+} from "./googleAuth";
 
 
 
 
-// WebBrowser.maybeCompleteAuthSession();
+WebBrowser.maybeCompleteAuthSession();
 
+{/* //! GOOGLE */ }
 
-//! GOOGLE
-// export function useGoogleAuth() {
+{/* export function useGoogleAuth() {
 
-//     const redirectUri = AuthSession.makeRedirectUri({
-//         native: "com.kuntal.finsight:/oauth2redirect"
-//     });
+    //     const redirectUri = AuthSession.makeRedirectUri({
+    //         native: "com.kuntal.finsight:/oauth2redirect"
+    //     });
 
-//     const [request, response, promptAsync] = Google.useAuthRequest({
-//         webClientId: "448319592790-ccojs2qe0fn2ie9rm6815enls2l2jqdg.apps.googleusercontent.com",
-//         androidClientId: "448319592790-tujb3j81tk20ikcgcrqu68ae3g6ruf9i.apps.googleusercontent.com",
-//         redirectUri: redirectUri,
-//     });
+    //     const [request, response, promptAsync] = Google.useAuthRequest({
+    //         webClientId: "448319592790-ccojs2qe0fn2ie9rm6815enls2l2jqdg.apps.googleusercontent.com",
+    //         androidClientId: "448319592790-tujb3j81tk20ikcgcrqu68ae3g6ruf9i.apps.googleusercontent.com",
+    //         redirectUri: redirectUri,
+    //     });
 
-//     async function handleGoogleResponse() {
-//         if (response?.type === "success") {
-//             const { id_token } = response.authentication;
-//             const credential = GoogleAuthProvider.credential(id_token);
-//             await signInWithCredential(auth, credential);
-//             // toast.show("Login Successful", { type: "success" })
+    //     async function handleGoogleResponse() {
+    //         if (response?.type === "success") {
+    //             const { id_token } = response.authentication;
+    //             const credential = GoogleAuthProvider.credential(id_token);
+    //             await signInWithCredential(auth, credential);
+    //             // toast.show("Login Successful", { type: "success" })
 
-//         }
-//     }
-//     return { promptAsync, response, handleGoogleResponse };
-// }
+    //         }
+    //     }
+    //     return { promptAsync, response, handleGoogleResponse };
+    // }
+    
+    */
+}
 
 
 
@@ -60,22 +63,6 @@ const SignInForm = ({ onSwitch }) => {
 
     const toast = useToast();
 
-    GoogleSignin.configure({
-        webClientId: '<FROM DEVELOPER CONSOLE>', // client ID of type WEB for your server. Required to get the `idToken` on the user object, and for offline access.
-        scopes: [
-            /* what APIs you want to access on behalf of the user, default is email and profile
-            this is just an example, most likely you don't need this option at all! */
-            'https://www.googleapis.com/auth/drive.readonly',
-        ],
-        offlineAccess: false, // if you want to access Google API on behalf of the user FROM YOUR SERVER
-        hostedDomain: '', // specifies a hosted domain restriction
-        forceCodeForRefreshToken: false, // [Android] related to `serverAuthCode`, read the docs link below *.
-        accountName: '', // [Android] specifies an account name on the device that should be used
-        iosClientId: '<FROM DEVELOPER CONSOLE>', // [iOS] if you want to specify the client ID of type iOS (otherwise, it is taken from GoogleService-Info.plist)
-        googleServicePlistPath: '', // [iOS] if you renamed your GoogleService-Info file, new name here, e.g. "GoogleService-Info-Staging"
-        openIdRealm: '', // [iOS] The OpenID2 realm of the home web server. This allows Google to include the user's OpenID Identifier in the OpenID Connect ID token.
-        profileImageSize: 120, // [iOS] The desired height (and width) of the profile image. Defaults to 120px
-    });
 
 
     //! SIGN IN
@@ -128,18 +115,19 @@ const SignInForm = ({ onSwitch }) => {
     }
 
 
-    // const { promptAsync, response, handleGoogleResponse } = useGoogleAuth();
+    {/*  const { promptAsync, response, handleGoogleResponse } = useGoogleAuth();
 
-    // useEffect(() => {
-    //     handleGoogleResponse();
-    // }, [response]);
+    useEffect(() => {
+        handleGoogleResponse();
+    }, [response]);
+*/}
 
     return (
         <View style={styles.formContainer}>
             <Text style={styles.formTxt}>Enter your login information</Text>
             <View style={styles.formInputMainContainer}>
 
-                //! INPUTS
+                {/* //! INPUTS*/ } 
                 <View style={styles.formInputContainer}>
                     <Ionicons color={"#E5E7EB"} style={{ marginRight: 8 }} name='mail-outline' size={25} />
                     <TextInput value={userEmail} onChangeText={(email) => { setuserEmail(email) }}
@@ -166,7 +154,8 @@ const SignInForm = ({ onSwitch }) => {
 
 
 
-            //! REMEMBER and FORGET PASS
+           
+            {/*  //! REMEMBER and FORGET PASS */}
             <View style={styles.rememberForgotContainer}>
                 <View style={{ flexDirection: "row", gap: 8 }}>
                     <ExpoCheckbox color={"#4F46E5"} value={checked} onValueChange={() => setchecked(!checked)} />
@@ -178,13 +167,13 @@ const SignInForm = ({ onSwitch }) => {
 
 
 
-            //!LOGIN BTN
+             {/* //!LOGIN BTN */}
             <TouchableOpacity onPress={() => { signInEmail(userEmail, userPass) }}>
                 <LinearGradient style={styles.btn} colors={["#4F46E5", "#6366F1"]}>
                     <Text style={styles.btnTxt}>{loading ? "LOGGING IN..." : "LOGIN"}</Text></LinearGradient>
             </TouchableOpacity>
 
-            //! OR DIVIDER
+            {/* //! OR DIVIDER   */}
             <View style={{ flexDirection: "row", alignItems: "center", marginTop: 30 }}>
                 <View style={styles.hrLine} />
                 <Text style={{ marginHorizontal: 10, fontSize: 20, color: "#A2A2A2FF" }}>
@@ -195,7 +184,7 @@ const SignInForm = ({ onSwitch }) => {
 
 
 
-            //! GOOGLE or FACEBOOK
+            {/* //! GOOGLE or FACEBOOK  */}
             <View style={styles.googleFacebook}>
                 <TouchableOpacity style={styles.socialBtnContainer} onPress={() => promptAsync()} >
                     <Image source={require("../assets/icons/google.png")} style={[styles.icon, { height: 30, width: 30 }]} />
@@ -211,7 +200,7 @@ const SignInForm = ({ onSwitch }) => {
                 </TouchableOpacity>
             </View>
 
-            //! SIGN UP
+            {/* //! SIGN UP */}
             <View style={styles.signUpContainer}>
                 <Text style={styles.signUpTxt}>Don't have an account?</Text>
                 <TouchableOpacity onPress={onSwitch}>
@@ -230,7 +219,6 @@ const styles = StyleSheet.create({
         backgroundColor: "#0C122259",
         height: height,
         borderRadius: 20,
-        // transform: [{ rotateY: "10deg" }]
 
     },
     formTxt: {

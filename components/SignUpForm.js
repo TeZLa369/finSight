@@ -19,7 +19,7 @@ const SignUpForm = ({ onSwitch }) => {
 
   const toast = useToast();
 
-  //! SIGN UP
+  {/* // ! SIGN UP */ }
   async function signUpEmail(email, password) {
     if (userPass === "" && userEmail === "") {
       toast.show("Enter credentials", {
@@ -75,7 +75,7 @@ const SignUpForm = ({ onSwitch }) => {
       <Text style={styles.formTxt}>Enter your sign up information</Text>
       <View style={styles.formInputMainContainer}>
 
-         //! INPUTS */
+         {/* //! INPUTS */}
         <View style={styles.formInputContainer}>
           <Ionicons color={"#E5E7EB"} style={{ marginRight: 8 }} name='mail-outline' size={25} />
           <TextInput value={userEmail} onChangeText={(email) => { setuserEmail(email) }} textContentType='emailAddress' placeholderTextColor={"#E5E7EB"} style={styles.formInput} placeholder='Email' />
@@ -92,13 +92,13 @@ const SignUpForm = ({ onSwitch }) => {
       </View>
 
 
-       //!SignUP BTN
+       {/* //!SignUP BTN */}
       <TouchableOpacity onPress={() => { signUpEmail(userEmail, userPass) }}>
         <LinearGradient style={styles.btn} colors={["#4F46E5", "#6366F1"]}>
           <Text style={styles.btnTxt}>{loading ? "SIGNING UP..." : "SIGN UP"}</Text></LinearGradient>
       </TouchableOpacity>
 
-       //! OR DIVIDER
+       {/* //! OR DIVIDER */}
       <View style={{ flexDirection: "row", alignItems: "center", marginTop: 30 }}>
         <View style={styles.hrLine} />
         <Text style={{ marginHorizontal: 10, fontSize: 20, color: "#A2A2A2FF" }}>
@@ -107,7 +107,7 @@ const SignUpForm = ({ onSwitch }) => {
         <View style={styles.hrLine} />
       </View>
 
-      //! GOOGLE or FACEBOOK
+      {/* //! GOOGLE or FACEBOOK */}
       <View style={styles.googleFacebook}>
         <TouchableOpacity style={styles.socialBtnContainer}>
           <Image source={require("../assets/icons/google.png")} style={[styles.icon, { height: 30, width: 30 }]} />
@@ -123,7 +123,7 @@ const SignUpForm = ({ onSwitch }) => {
         </TouchableOpacity>
       </View>
 
-      //! SIGN UP
+      {/* //! SIGN UP */}
       <View style={styles.signUpContainer}>
         <Text style={styles.signUpTxt}>Already have an account?</Text>
         <TouchableOpacity onPress={onSwitch}>

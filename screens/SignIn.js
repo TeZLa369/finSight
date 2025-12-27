@@ -62,7 +62,7 @@ const SignIn = () => {
     return (
         <LinearGradient colors={["#0C1222", "#05080F"]} style={[styles.container,]}>
             <BlurView intensity={50} tint='dark' style={[styles.glass, { paddingTop: insets.top }]}>
-                //! HEADING TXT
+                {/* //! HEADING TXT */}
                 <Animated.View style={{ opacity: fade, }}>
                     {isSignUp ? (
                         <Text style={styles.headingTxt}>CREATE{"\n"} AN ACCOUNT</Text>
@@ -71,7 +71,7 @@ const SignIn = () => {
                     )}
                 </Animated.View>
 
-                //! BLOBS
+                {/* //! BLOBS */}
                 {/* <View style={styles.sideIconContainer}> */}
                 <Image source={require("../assets/icons/side_icons.png")}
                     style={[styles.sideIcon, { left: -150, top: 50 }]} />
@@ -80,7 +80,7 @@ const SignIn = () => {
                 {/* </View> */}
 
 
-                 //! FORM
+                 {/* //! FORM */}
                 <Animated.View style={{ opacity: fade, transform: [{ rotateY: rotateInterpolate }] }}>
                     {isSignUp ?
                         (<SignUpForm onSwitch={rotateForm} />) :

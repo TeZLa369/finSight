@@ -15,7 +15,9 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.kuntal.finsight"
+      "bundleIdentifier": "com.kuntal.finsight",
+      "googleServicesFile": "./GoogleService-Info.plist"
+
     },
     "android": {
       "package": "com.kuntal.finsight",
@@ -31,12 +33,11 @@
     },
     "plugins": [
       "expo-web-browser",
-      [
-        "@react-native-google-signin/google-signin",
-        {
-          "iosUrlScheme": "com.googleusercontent.apps.448319592790-kdvq92igkdcsu5k01e7euujhm51o04h8"
-        }
-      ]
+      ["@react-native-google-signin/google-signin",
+      {
+        "iosUrlScheme":"com.googleusercontent.apps.448319592790-kdvq92igkdcsu5k01e7euujhm51o04h8"
+      }
+    ]
     ],
     "extra": {
       "eas": {
