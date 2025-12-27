@@ -2,20 +2,24 @@
   "expo": {
     "name": "finSight",
     "slug": "finSight",
+    "scheme": "finsight",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
-    "newArchEnabled": true,
+    "newArchEnabled": false,
     "splash": {
       "image": "./assets/splash-icon.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.kuntal.finsight"
     },
     "android": {
+      "package": "com.kuntal.finsight",
+      "googleServicesFile": "./google-services.json",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
@@ -24,6 +28,20 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      "expo-web-browser",
+      [
+        "@react-native-google-signin/google-signin",
+        {
+          "iosUrlScheme": "com.googleusercontent.apps.448319592790-kdvq92igkdcsu5k01e7euujhm51o04h8"
+        }
+      ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "b7f475ed-8e07-4a3f-a699-eaad1623845b"
+      }
     }
   }
 }
