@@ -14,6 +14,30 @@
       },
       "oauth_client": [
         {
+          "client_id": "448319592790-6kkcc9m5ss7qbnhppk1m6d2d17pqul94.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.kuntal.finsight",
+            "certificate_hash": "42d815eb3e2de469530104ea1d43b7fbd119fe3b"
+          }
+        },
+        {
+          "client_id": "448319592790-db84d0rrpqi7tbtarqh8p689e419hd5a.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.kuntal.finsight",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "448319592790-tujb3j81tk20ikcgcrqu68ae3g6ruf9i.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.kuntal.finsight",
+            "certificate_hash": "f67a1dc72bd1afddcdf0b85ffed7767591891b9e"
+          }
+        },
+        {
           "client_id": "448319592790-ccojs2qe0fn2ie9rm6815enls2l2jqdg.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -29,6 +53,13 @@
             {
               "client_id": "448319592790-ccojs2qe0fn2ie9rm6815enls2l2jqdg.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "448319592790-kdvq92igkdcsu5k01e7euujhm51o04h8.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.kuntal.finsight"
+              }
             }
           ]
         }

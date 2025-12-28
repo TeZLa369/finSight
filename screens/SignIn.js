@@ -11,6 +11,8 @@ import SignUpForm from '../components/SignUpForm';
 const { height, width } = Dimensions.get("window");
 
 
+
+
 const SignIn = () => {
 
     const isAnimating = useRef(false);

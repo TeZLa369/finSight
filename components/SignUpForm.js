@@ -2,13 +2,11 @@ import { View, Text, StyleSheet, Dimensions, Image, TouchableOpacity, TextInput 
 import { useState } from 'react'
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
-import ExpoCheckbox from 'expo-checkbox/build/ExpoCheckbox';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { useToast } from 'react-native-toast-notifications';
 import { auth } from './firebaseConfig';
+
 const { height, width } = Dimensions.get("window");
-
-
 
 const SignUpForm = ({ onSwitch }) => {
 
@@ -19,7 +17,7 @@ const SignUpForm = ({ onSwitch }) => {
 
   const toast = useToast();
 
-  {/* // ! SIGN UP */ }
+  //! SIGN UP 
   async function signUpEmail(email, password) {
     if (userPass === "" && userEmail === "") {
       toast.show("Enter credentials", {
@@ -68,37 +66,53 @@ const SignUpForm = ({ onSwitch }) => {
     }
   }
 
-
-
   return (
     <View style={styles.formContainer}>
       <Text style={styles.formTxt}>Enter your sign up information</Text>
       <View style={styles.formInputMainContainer}>
 
-         {/* //! INPUTS */}
+        {/* //! INPUTS */}
         <View style={styles.formInputContainer}>
           <Ionicons color={"#E5E7EB"} style={{ marginRight: 8 }} name='mail-outline' size={25} />
-          <TextInput value={userEmail} onChangeText={(email) => { setuserEmail(email) }} textContentType='emailAddress' placeholderTextColor={"#E5E7EB"} style={styles.formInput} placeholder='Email' />
+          <TextInput
+            value={userEmail}
+            onChangeText={(email) => { setuserEmail(email) }}
+            textContentType='emailAddress'
+            placeholderTextColor={"#E5E7EB"}
+            style={styles.formInput}
+            placeholder='Email'
+          />
         </View>
 
 
         <View style={[styles.formInputContainer, { justifyContent: "space-between" }]}>
           <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
             <Ionicons color={"#E5E7EB"} name='lock-closed-outline' size={25} />
-            <TextInput value={userPass} onChangeText={(pass) => { setuserPass(pass) }} textContentType='password' placeholderTextColor={"#E5E7EB"} style={styles.formInput} placeholder='Password' />
-          </View> <TouchableOpacity onPress={() => { setpassShown(!passShown) }}>
+            <TextInput
+              value={userPass}
+              onChangeText={(pass) => { setuserPass(pass) }}
+              textContentType='password'
+              secureTextEntry={!passShown}
+              placeholderTextColor={"#E5E7EB"}
+              style={styles.formInput}
+              placeholder='Password'
+            />
+          </View>
+          <TouchableOpacity onPress={() => { setpassShown(!passShown) }}>
             <Ionicons color={"#E5E7EB"} name={passShown ? "eye" : 'eye-off-outline'} size={25} />
-          </TouchableOpacity> </View>
+          </TouchableOpacity>
+        </View>
+      
       </View>
 
 
-       {/* //!SignUP BTN */}
+      {/* //!SignUP BTN */}
       <TouchableOpacity onPress={() => { signUpEmail(userEmail, userPass) }}>
         <LinearGradient style={styles.btn} colors={["#4F46E5", "#6366F1"]}>
           <Text style={styles.btnTxt}>{loading ? "SIGNING UP..." : "SIGN UP"}</Text></LinearGradient>
       </TouchableOpacity>
 
-       {/* //! OR DIVIDER */}
+      {/* //! OR DIVIDER */}
       <View style={{ flexDirection: "row", alignItems: "center", marginTop: 30 }}>
         <View style={styles.hrLine} />
         <Text style={{ marginHorizontal: 10, fontSize: 20, color: "#A2A2A2FF" }}>
@@ -134,7 +148,7 @@ const SignUpForm = ({ onSwitch }) => {
   )
 }
 
-export default SignUpForm
+export default SignUpForm;
 
 const styles = StyleSheet.create({
   formContainer: {
@@ -142,7 +156,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#0C122259",
     height: height,
     borderRadius: 20,
-
   },
   formTxt: {
     fontSize: 18,
@@ -155,7 +168,6 @@ const styles = StyleSheet.create({
     padding: 18,
     gap: 12
   },
-
   formInputContainer: {
     flexDirection: "row",
     backgroundColor: "rgba(255, 255, 255, 0.08)",
@@ -163,13 +175,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     padding: 8,
   },
-
   formInput: {
     color: "#ffffff",
     maxWidth: width,
     width: width * 0.6
   },
-
   rememberForgotContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -188,7 +198,7 @@ const styles = StyleSheet.create({
   btnTxt: {
     color: "#ffffff",
     fontSize: 18,
-    fontWeight: 700
+    fontWeight: "700" 
   },
   hrLine: {
     flex: height,
@@ -200,8 +210,6 @@ const styles = StyleSheet.create({
     marginTop: 30,
     justifyContent: "center",
     gap: 8
-
-
   },
   socialBtnContainer: {
     flexDirection: "row",
@@ -212,7 +220,6 @@ const styles = StyleSheet.create({
     paddingLeft: 30,
     paddingRight: 30,
     gap: 8,
-
   },
   socialTxt: {
     color: "#ffffff"

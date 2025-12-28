@@ -7,49 +7,9 @@ import { auth } from './firebaseConfig';
 import { GoogleAuthProvider, signInWithCredential, signInWithEmailAndPassword } from 'firebase/auth';
 import { useToast } from 'react-native-toast-notifications';
 const { height, width } = Dimensions.get("window");
-import * as WebBrowser from "expo-web-browser";
-import * as Google from "expo-auth-session/providers/google";
-import * as AuthSession from 'expo-auth-session'
-
-import {
-    GoogleSignin,
-    GoogleSigninButton,
-    statusCodes,
-} from "./googleAuth";
-
-
-
-
-WebBrowser.maybeCompleteAuthSession();
-
-{/* //! GOOGLE */ }
-
-{/* export function useGoogleAuth() {
-
-    //     const redirectUri = AuthSession.makeRedirectUri({
-    //         native: "com.kuntal.finsight:/oauth2redirect"
-    //     });
-
-    //     const [request, response, promptAsync] = Google.useAuthRequest({
-    //         webClientId: "448319592790-ccojs2qe0fn2ie9rm6815enls2l2jqdg.apps.googleusercontent.com",
-    //         androidClientId: "448319592790-tujb3j81tk20ikcgcrqu68ae3g6ruf9i.apps.googleusercontent.com",
-    //         redirectUri: redirectUri,
-    //     });
-
-    //     async function handleGoogleResponse() {
-    //         if (response?.type === "success") {
-    //             const { id_token } = response.authentication;
-    //             const credential = GoogleAuthProvider.credential(id_token);
-    //             await signInWithCredential(auth, credential);
-    //             // toast.show("Login Successful", { type: "success" })
-
-    //         }
-    //     }
-    //     return { promptAsync, response, handleGoogleResponse };
-    // }
-    
-    */
-}
+import { GoogleSignin, isSuccessResponse, isErrorWithCode, statusCodes } from '@react-native-google-signin/google-signin';
+import { FacebookAuthProvider, getAuth, signInWithCredential } from '@react-native-firebase/auth';
+import { LoginManager, AccessToken } from 'react-native-fbsdk-next';
 
 
 
@@ -59,11 +19,10 @@ const SignInForm = ({ onSwitch }) => {
     const [loading, setloading] = useState(false);
     const [userEmail, setuserEmail] = useState("");
     const [userPass, setuserPass] = useState("");
+    const [googleSignin, setGoogleSignin] = useState(false)
 
 
     const toast = useToast();
-
-
 
     //! SIGN IN
     async function signInEmail(email, password) {
@@ -115,19 +74,112 @@ const SignInForm = ({ onSwitch }) => {
     }
 
 
-    {/*  const { promptAsync, response, handleGoogleResponse } = useGoogleAuth();
 
     useEffect(() => {
-        handleGoogleResponse();
-    }, [response]);
-*/}
+        GoogleSignin.configure({
+            webClientId: "448319592790-ccojs2qe0fn2ie9rm6815enls2l2jqdg.apps.googleusercontent.com",
+            offlineAccess: true,
+        });
+    }, []);
+
+
+
+    //! GOOGLE SIGN IN
+    async function handleGoogleSignIn() {
+
+        try {
+            setGoogleSignin(true);
+            console.log("STEP 1: starting");
+            await GoogleSignin.hasPlayServices();
+            console.log("STEP 2: play services OK");
+            const response = await GoogleSignin.signIn();
+            console.log("STEP 3: response", response);
+
+            // const credential = GoogleAuthProvider.credential(response.idToken);
+            // await signInWithCredential(auth, credential);
+
+            if (isSuccessResponse(response)) {
+                toast.show("Login Successful", {
+                    type: "success",
+                    placement: "bottom"
+                })
+            }
+            else {
+                toast.show("User Cancelled the Login", {
+                    type: "warning",
+                    placement: "bottom"
+                })
+            }
+
+            setGoogleSignin(false);
+        } catch (error) {
+            console.log("ERROR CAUGHT:", error, error.code)
+            if (isErrorWithCode(error)) {
+                switch (error.code) {
+                    case statusCodes.IN_PROGRESS:
+                        toast.show("Sign in already in progress", {
+                            type: "warning",
+                            placement: "bottom"
+                        })
+                        break;
+                    case statusCodes.PLAY_SERVICES_NOT_AVAILABLE:
+                        toast.show("Play services not available", {
+                            type: "warning",
+                            placement: "bottom"
+                        })
+
+                        break;
+                    default:
+                        toast.show("Error: " + error.code, {
+                            type: "warning",
+                            placement: "bottom"
+                        })
+                }
+            }
+            else {
+                toast.show("An error occurred", {
+                    type: "warning",
+                    placement: "bottom"
+                })
+            }
+
+            setGoogleSignin(false);
+
+        }
+    }
+
+
+    // ! FACEBOOK
+    async function onFacebookButtonPress() {
+        // Attempt login with permissions
+        const result = await LoginManager.logInWithPermissions(['public_profile', 'email']);
+
+        if (result.isCancelled) {
+            throw 'User cancelled the login process';
+        }
+
+        // Once signed in, get the users AccessToken
+        const data = await AccessToken.getCurrentAccessToken();
+
+        if (!data) {
+            throw 'Something went wrong obtaining access token';
+        }
+
+        // Create a Firebase credential with the AccessToken
+        const facebookCredential = FacebookAuthProvider.credential(data.accessToken);
+
+        // Sign-in the user with the credential
+        return signInWithCredential(getAuth(), facebookCredential);
+    }
+
+
 
     return (
         <View style={styles.formContainer}>
             <Text style={styles.formTxt}>Enter your login information</Text>
             <View style={styles.formInputMainContainer}>
 
-                {/* //! INPUTS*/ } 
+                {/* //! INPUTS*/}
                 <View style={styles.formInputContainer}>
                     <Ionicons color={"#E5E7EB"} style={{ marginRight: 8 }} name='mail-outline' size={25} />
                     <TextInput value={userEmail} onChangeText={(email) => { setuserEmail(email) }}
@@ -143,6 +195,7 @@ const SignInForm = ({ onSwitch }) => {
                         <TextInput value={userPass}
                             onChangeText={(pass) => { setuserPass(pass) }}
                             textContentType='password'
+                            secureTextEntry={!passShown}
                             placeholderTextColor={"#E5E7EB"} style={styles.formInput}
                             placeholder='Password' />
                     </View>
@@ -154,7 +207,7 @@ const SignInForm = ({ onSwitch }) => {
 
 
 
-           
+
             {/*  //! REMEMBER and FORGET PASS */}
             <View style={styles.rememberForgotContainer}>
                 <View style={{ flexDirection: "row", gap: 8 }}>
@@ -167,7 +220,7 @@ const SignInForm = ({ onSwitch }) => {
 
 
 
-             {/* //!LOGIN BTN */}
+            {/* //!LOGIN BTN */}
             <TouchableOpacity onPress={() => { signInEmail(userEmail, userPass) }}>
                 <LinearGradient style={styles.btn} colors={["#4F46E5", "#6366F1"]}>
                     <Text style={styles.btnTxt}>{loading ? "LOGGING IN..." : "LOGIN"}</Text></LinearGradient>
@@ -186,7 +239,7 @@ const SignInForm = ({ onSwitch }) => {
 
             {/* //! GOOGLE or FACEBOOK  */}
             <View style={styles.googleFacebook}>
-                <TouchableOpacity style={styles.socialBtnContainer} onPress={() => promptAsync()} >
+                <TouchableOpacity style={styles.socialBtnContainer} onPress={() => { handleGoogleSignIn() }} >
                     <Image source={require("../assets/icons/google.png")} style={[styles.icon, { height: 30, width: 30 }]} />
                     <Text style={styles.socialTxt}>GOOGLE</Text>
                 </TouchableOpacity>

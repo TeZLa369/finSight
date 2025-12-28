@@ -4,6 +4,7 @@ import SignUp from './screens/SignUp';
 import SignIn from './screens/SignIn';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { ToastProvider } from 'react-native-toast-notifications';
+import SignUpForm from './components/SignUpForm';
 
 
 export default function App() {
