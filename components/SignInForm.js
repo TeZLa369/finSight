@@ -4,11 +4,11 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import ExpoCheckbox from 'expo-checkbox/build/ExpoCheckbox';
 import { auth } from './firebaseConfig';
-import { GoogleAuthProvider, signInWithCredential, signInWithEmailAndPassword } from 'firebase/auth';
+import { sendPasswordResetEmail, signInWithEmailAndPassword } from 'firebase/auth';
 import { useToast } from 'react-native-toast-notifications';
 const { height, width } = Dimensions.get("window");
 import { GoogleSignin, isSuccessResponse, isErrorWithCode, statusCodes } from '@react-native-google-signin/google-signin';
-import { FacebookAuthProvider, getAuth, signInWithCredential } from '@react-native-firebase/auth';
+import { FacebookAuthProvider, getAuth, signInWithCredential as signInWithCredentialFB } from '@react-native-firebase/auth';
 import { LoginManager, AccessToken } from 'react-native-fbsdk-next';
 
 
@@ -89,11 +89,8 @@ const SignInForm = ({ onSwitch }) => {
 
         try {
             setGoogleSignin(true);
-            console.log("STEP 1: starting");
             await GoogleSignin.hasPlayServices();
-            console.log("STEP 2: play services OK");
             const response = await GoogleSignin.signIn();
-            console.log("STEP 3: response", response);
 
             // const credential = GoogleAuthProvider.credential(response.idToken);
             // await signInWithCredential(auth, credential);
@@ -168,10 +165,40 @@ const SignInForm = ({ onSwitch }) => {
         // Create a Firebase credential with the AccessToken
         const facebookCredential = FacebookAuthProvider.credential(data.accessToken);
 
+        toast.show("Login Successful", {
+            type: "success",
+            placement: "bottom"
+        })
         // Sign-in the user with the credential
-        return signInWithCredential(getAuth(), facebookCredential);
+        return signInWithCredentialFB(getAuth(), facebookCredential);
+
     }
 
+
+
+    // ! FORGOT PASS
+    async function forgotPass(email) {
+
+        if (email === "") {
+            toast.show("Please enter the email", {
+                type: "warning"
+            })
+            return;
+        }
+        else {
+            try {
+                await sendPasswordResetEmail(auth, email);
+                toast.show("Email has been sent!", {
+                    type: "success"
+                })
+
+            } catch (error) {
+                toast.show(error.message, {
+                    type: "warning"
+                })
+            }
+        }
+    }
 
 
     return (
@@ -206,15 +233,13 @@ const SignInForm = ({ onSwitch }) => {
             </View>
 
 
-
-
             {/*  //! REMEMBER and FORGET PASS */}
             <View style={styles.rememberForgotContainer}>
                 <View style={{ flexDirection: "row", gap: 8 }}>
                     <ExpoCheckbox color={"#4F46E5"} value={checked} onValueChange={() => setchecked(!checked)} />
                     <Text style={{ color: "#B4B4B4FF" }}>Remember me</Text>
                 </View>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={() => { forgotPass(userEmail) }}>
                     <Text style={{ color: "#B4B4B4FF" }}>Forgot Password?</Text></TouchableOpacity>
             </View>
 
@@ -244,7 +269,7 @@ const SignInForm = ({ onSwitch }) => {
                     <Text style={styles.socialTxt}>GOOGLE</Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={[styles.socialBtnContainer, {
+                <TouchableOpacity onPress={() => { onFacebookButtonPress() }} style={[styles.socialBtnContainer, {
                     paddingLeft: 28,
                     paddingRight: 28,
                 }]}>

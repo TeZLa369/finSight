@@ -36,6 +36,19 @@
       "@react-native-firebase/auth",
       "@react-native-firebase/crashlytics",
       [
+        "react-native-fbsdk-next",
+        {
+          "appID": "1812796296032225",
+          "clientToken": "0e574d42ad2f2f7c36c743e28fba4ba8",
+          "displayName": "finsight",
+          "scheme": "fb48127127xxxxxxxx",
+          "advertiserIDCollectionEnabled": false,
+          "autoLogAppEventsEnabled": false,
+          "isAutoInitEnabled": true,
+          "iosUserTrackingPermission": "This identifier will be used to deliver personalized ads to you."
+        }
+      ],
+      [
         "@react-native-google-signin/google-signin",
         {
           "iosUrlScheme": "com.googleusercontent.apps.448319592790-kdvq92igkdcsu5k01e7euujhm51o04h8"

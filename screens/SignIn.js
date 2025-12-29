@@ -61,6 +61,45 @@ const SignIn = () => {
     });
 
 
+    const leftAnim = useRef(new Animated.Value(-150)).current;
+    const leftAnimTop = useRef(new Animated.Value(50)).current;
+
+    const rightAnim = useRef(new Animated.Value(-150)).current;
+    const rightAnimTop = useRef(new Animated.Value(500)).current;
+
+
+    const moveBlobs1 = () => {
+        Animated.parallel([
+            Animated.timing(leftAnimTop, {
+                toValue: 500,
+                duration: 1000,
+                useNativeDriver: false,
+            }),
+            Animated.timing(rightAnimTop, {
+                toValue: 50,
+                duration: 1000,
+                useNativeDriver: false
+            })
+        ]).start();
+    }
+
+    const moveBlobs2 = () => {
+        Animated.parallel([
+            Animated.timing(leftAnimTop, {
+                toValue: 50,
+                duration: 1000,
+                useNativeDriver: false,
+            }),
+            Animated.timing(rightAnimTop, {
+                toValue: 500,
+                duration: 1000,
+                useNativeDriver: false
+            })
+        ]).start();
+    }
+
+
+
     return (
         <LinearGradient colors={["#0C1222", "#05080F"]} style={[styles.container,]}>
             <BlurView intensity={50} tint='dark' style={[styles.glass, { paddingTop: insets.top }]}>
@@ -74,19 +113,20 @@ const SignIn = () => {
                 </Animated.View>
 
                 {/* //! BLOBS */}
-                {/* <View style={styles.sideIconContainer}> */}
-                <Image source={require("../assets/icons/side_icons.png")}
-                    style={[styles.sideIcon, { left: -150, top: 50 }]} />
-                <Image source={require("../assets/icons/side_icons.png")}
-                    style={[styles.sideIcon, { right: -150, top: 500 }]} />
-                {/* </View> */}
+                <Animated.Image source={require("../assets/icons/side_icons.png")}
+                    style={[styles.sideIcon, { left: leftAnim, top: leftAnimTop }]} />
+                {/* // style={[styles.sideIcon, { left: -150, top: 500 }]} /> */}
+                <Animated.Image source={require("../assets/icons/side_icons.png")}
+                    style={[styles.sideIcon, { right: rightAnim, top: rightAnimTop }]} />
+                {/* style={[styles.sideIcon, { right: -150, top: 50 }]} /> */}
 
 
-                 {/* //! FORM */}
+
+                {/* //! FORM */}
                 <Animated.View style={{ opacity: fade, transform: [{ rotateY: rotateInterpolate }] }}>
                     {isSignUp ?
-                        (<SignUpForm onSwitch={rotateForm} />) :
-                        (<SignInForm onSwitch={rotateForm} />)
+                        (<SignUpForm onSwitch={() => { moveBlobs2(), rotateForm() }} />) :
+                        (<SignInForm onSwitch={() => { moveBlobs1(), rotateForm() }} />)
                     }
 
                 </Animated.View>

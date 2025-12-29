@@ -1,10 +1,13 @@
 import { View, Text, StyleSheet, Dimensions, Image, TouchableOpacity, TextInput } from 'react-native'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { useToast } from 'react-native-toast-notifications';
 import { auth } from './firebaseConfig';
+import { GoogleSignin, isSuccessResponse, isErrorWithCode, statusCodes } from '@react-native-google-signin/google-signin';
+import { FacebookAuthProvider, getAuth, signInWithCredential as signInWithCredentialFB } from '@react-native-firebase/auth';
+import { LoginManager, AccessToken } from 'react-native-fbsdk-next';
 
 const { height, width } = Dimensions.get("window");
 
@@ -14,8 +17,108 @@ const SignUpForm = ({ onSwitch }) => {
   const [loading, setloading] = useState(false);
   const [userEmail, setuserEmail] = useState("");
   const [userPass, setuserPass] = useState("");
+  const [googleSignin, setGoogleSignin] = useState(false)
 
   const toast = useToast();
+  useEffect(() => {
+    GoogleSignin.configure({
+      webClientId: "448319592790-ccojs2qe0fn2ie9rm6815enls2l2jqdg.apps.googleusercontent.com",
+      offlineAccess: true,
+    });
+  }, []);
+
+
+  //! GOOGLE SIGN IN
+  async function handleGoogleSignIn() {
+
+    try {
+      setGoogleSignin(true);
+      await GoogleSignin.hasPlayServices();
+      const response = await GoogleSignin.signIn();
+
+      // const credential = GoogleAuthProvider.credential(response.idToken);
+      // await signInWithCredential(auth, credential);
+
+      if (isSuccessResponse(response)) {
+        toast.show("Login Successful", {
+          type: "success",
+          placement: "bottom"
+        })
+      }
+      else {
+        toast.show("User Cancelled the Login", {
+          type: "warning",
+          placement: "bottom"
+        })
+      }
+
+      setGoogleSignin(false);
+    } catch (error) {
+      console.log("ERROR CAUGHT:", error, error.code)
+      if (isErrorWithCode(error)) {
+        switch (error.code) {
+          case statusCodes.IN_PROGRESS:
+            toast.show("Sign in already in progress", {
+              type: "warning",
+              placement: "bottom"
+            })
+            break;
+          case statusCodes.PLAY_SERVICES_NOT_AVAILABLE:
+            toast.show("Play services not available", {
+              type: "warning",
+              placement: "bottom"
+            })
+
+            break;
+          default:
+            toast.show("Error: " + error.code, {
+              type: "warning",
+              placement: "bottom"
+            })
+        }
+      }
+      else {
+        toast.show("An error occurred", {
+          type: "warning",
+          placement: "bottom"
+        })
+      }
+
+      setGoogleSignin(false);
+
+    }
+  }
+
+
+  // ! FACEBOOK
+  async function onFacebookButtonPress() {
+    // Attempt login with permissions
+    const result = await LoginManager.logInWithPermissions(['public_profile', 'email']);
+
+    if (result.isCancelled) {
+      throw 'User cancelled the login process';
+    }
+
+    // Once signed in, get the users AccessToken
+    const data = await AccessToken.getCurrentAccessToken();
+
+    if (!data) {
+      throw 'Something went wrong obtaining access token';
+    }
+
+    // Create a Firebase credential with the AccessToken
+    const facebookCredential = FacebookAuthProvider.credential(data.accessToken);
+
+    toast.show("Login Successful", {
+      type: "success",
+      placement: "bottom"
+    })
+    // Sign-in the user with the credential
+    return signInWithCredentialFB(getAuth(), facebookCredential);
+
+  }
+
+
 
   //! SIGN UP 
   async function signUpEmail(email, password) {
@@ -102,7 +205,7 @@ const SignUpForm = ({ onSwitch }) => {
             <Ionicons color={"#E5E7EB"} name={passShown ? "eye" : 'eye-off-outline'} size={25} />
           </TouchableOpacity>
         </View>
-      
+
       </View>
 
 
@@ -123,12 +226,12 @@ const SignUpForm = ({ onSwitch }) => {
 
       {/* //! GOOGLE or FACEBOOK */}
       <View style={styles.googleFacebook}>
-        <TouchableOpacity style={styles.socialBtnContainer}>
+        <TouchableOpacity onPress={() => { handleGoogleSignIn() }} style={styles.socialBtnContainer}>
           <Image source={require("../assets/icons/google.png")} style={[styles.icon, { height: 30, width: 30 }]} />
           <Text style={styles.socialTxt}>GOOGLE</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={[styles.socialBtnContainer, {
+        <TouchableOpacity onPress={() => { onFacebookButtonPress() }} style={[styles.socialBtnContainer, {
           paddingLeft: 28,
           paddingRight: 28,
         }]}>
@@ -198,7 +301,7 @@ const styles = StyleSheet.create({
   btnTxt: {
     color: "#ffffff",
     fontSize: 18,
-    fontWeight: "700" 
+    fontWeight: "700"
   },
   hrLine: {
     flex: height,
