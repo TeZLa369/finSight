@@ -1,7 +1,7 @@
 import { EvilIcons, Ionicons, MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import { BlurView } from 'expo-blur';
 import { LinearGradient } from 'expo-linear-gradient'
-import { StyleSheet, Text, View, Image, Dimensions, FlatList, TouchableOpacity } from 'react-native'
+import { StyleSheet, Text, View, Image, Dimensions, FlatList, TouchableOpacity, Pressable } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 const { height, width } = Dimensions.get("window");
 
@@ -55,8 +55,8 @@ const Home = () => {
     ];
 
 
-    let owe = 1720;
-    let receive = 4200;
+    let owe = 0;
+    let receive = 0;
 
     return (
 
@@ -90,17 +90,17 @@ const Home = () => {
                         < View style={styles.infoSubContainer} >
                             <Ionicons style={[styles.icons, { backgroundColor: "#FF868650", }]} name='arrow-down' size={28} color={"#FF8686"} />
                             <Text style={styles.labelText}>You Owe</Text>
-                            <Text style={styles.amountTextOwe}>₹1000</Text>
+                            <Text style={styles.amountTextOwe}>₹{owe}</Text>
                         </View>
                         <View style={styles.infoSubContainer}>
                             <Ionicons style={[styles.icons, { backgroundColor: "rgba(134,255,144,0.31)", }]} name='arrow-up' size={28} color={"#86FF90C4"} />
                             <Text style={styles.labelText}>You'll Receive</Text>
-                            <Text style={styles.amountTextReceive}>₹400</Text>
+                            <Text style={styles.amountTextReceive}>₹{receive}</Text>
                         </View>
                         <View style={styles.infoSubContainer}>
                             <MaterialCommunityIcons style={[styles.icons, { backgroundColor: "rgba(202,186,42,0.28)", }]} name="clock-outline" size={28} color={"#F1DD2A"} />
                             <Text style={styles.labelText}>Unsettled</Text>
-                            <Text style={styles.amountTextPending}>₹1400</Text>
+                            <Text style={styles.amountTextPending}>₹{owe + receive}</Text>
                         </View>
                     </LinearGradient>
                 </BlurView>
@@ -109,28 +109,37 @@ const Home = () => {
                 {/* //! FLATLIST */}
                 <FlatList
                     contentContainerStyle={{ paddingBottom: insets.bottom * insets.bottom + 80, }}
-                    data={mockSplitsData}
+                    data={[]}
                     keyExtractor={item => item.id}
                     renderItem={({ item }) => (
-
-                        <BlurView intensity={20} tint='dark' style={[styles.glass, styles.listItemGlass]}>
-                            <LinearGradient colors={["rgba(255,255,255,0.01)", "rgba(255,255,255,0.05)"]}
-                                start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={styles.moneydataContainer}>
-                                <View style={styles.listContainer}>
-                                    <View style={styles.listSubContainer}>
-                                        <Text style={styles.listTitle}>{item.title}</Text>
-                                        <Text style={styles.listAmt}>₹{item.totalAmount}</Text>
-                                        <Text style={styles.listOwe}>User's share: ₹{item.userShare}</Text>
+                        <TouchableOpacity>
+                            <BlurView intensity={20} tint='dark' style={[styles.glass, styles.listItemGlass]}>
+                                <LinearGradient colors={["rgba(255,255,255,0.01)", "rgba(255,255,255,0.05)"]}
+                                    start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={styles.moneydataContainer}>
+                                    <View style={styles.listContainer}>
+                                        <View style={styles.listSubContainer}>
+                                            <Text style={styles.listTitle}>{item.title}</Text>
+                                            <Text style={styles.listAmt}>₹{item.totalAmount}</Text>
+                                            <Text style={styles.listOwe}>User's share: ₹{item.userShare}</Text>
+                                        </View>
+                                        <Text style={[styles.listStatus,
+                                        {
+                                            backgroundColor: item.status === "Pending" ? "rgba(202,186,42,0.28)" : "rgba(134,255,144,0.31)",
+                                            color: item.status === "Pending" ? "#F1DD2A" : "#86FF90C4"
+                                        }]}>{item.status}</Text>
                                     </View>
-                                    <Text style={[styles.listStatus,
-                                    {
-                                        backgroundColor: item.status === "Pending" ? "rgba(202,186,42,0.28)" : "rgba(134,255,144,0.31)",
-                                        color: item.status === "Pending" ? "#F1DD2A" : "#86FF90C4"
-                                    }]}>{item.status}</Text>
-                                </View>
-                            </LinearGradient>
-                        </BlurView >
-                    )} />
+                                </LinearGradient>
+                            </BlurView ></TouchableOpacity>
+                    )}
+
+                    ListEmptyComponent={() => (
+                        <View style={styles.emptyList}>
+                            <Image source={require("../assets/emptyIcon.png")} style={styles.emptyListIcon} />
+                            <Text style={styles.emptyListTitle}>No Splits Yet</Text>
+                            <Text style={styles.emptyListSubTitle}>Start by creating your first split with friends</Text>
+                        </View>
+                    )}
+                />
 
 
 
@@ -284,20 +293,37 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         alignSelf: "center",
-    },
-    btnGradient: {
-        elevation: 8,
-        paddingVertical: 15,
-        borderRadius: 18,
-        paddingHorizontal: 90,
         shadowColor: "#000",
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.6,
         shadowRadius: 4.65,
+
+    },
+    btnGradient: {
+        paddingVertical: 15,
+        borderRadius: 18,
+        paddingHorizontal: 90,
+
     },
     btnTxt: {
         color: '#fff',
         fontWeight: 'bold',
         fontSize: 16
+    },
+    emptyList: {
+        alignItems: "center",
+        gap: 12,
+        marginTop: 30,
+    },
+    emptyListIcon: {
+        height: 80,
+        width: 80
+    },
+    emptyListTitle: {
+        fontSize: 30,
+        fontWeight: "bold"
+    },
+    emptyListSubTitle: {
+
     }
 })
