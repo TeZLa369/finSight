@@ -5,6 +5,7 @@ import SignIn from './screens/SignIn';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { ToastProvider } from 'react-native-toast-notifications';
 import SignUpForm from './components/SignUpForm';
+import Home from './screens/Home';
 
 
 export default function App() {
@@ -15,7 +16,7 @@ export default function App() {
         duration={2000}
         offset={50}>
         <StatusBar style='light' />
-        <SignIn />
+        <Home />
       </ToastProvider>
     </SafeAreaProvider>
 

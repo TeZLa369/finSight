@@ -115,10 +115,8 @@ const SignIn = () => {
                 {/* //! BLOBS */}
                 <Animated.Image source={require("../assets/icons/side_icons.png")}
                     style={[styles.sideIcon, { left: leftAnim, top: leftAnimTop }]} />
-                {/* // style={[styles.sideIcon, { left: -150, top: 500 }]} /> */}
                 <Animated.Image source={require("../assets/icons/side_icons.png")}
                     style={[styles.sideIcon, { right: rightAnim, top: rightAnimTop }]} />
-                {/* style={[styles.sideIcon, { right: -150, top: 50 }]} /> */}
 
 
 

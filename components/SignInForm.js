@@ -208,7 +208,8 @@ const SignInForm = ({ onSwitch }) => {
 
                 {/* //! INPUTS*/}
                 <View style={styles.formInputContainer}>
-                    <Ionicons color={"#E5E7EB"} style={{ marginRight: 8 }} name='mail-outline' size={25} />
+                    <Ionicons color={"#E5E7EB"} style={{ marginRight: 8 }}
+                        name='mail-outline' size={25} />
                     <TextInput value={userEmail} onChangeText={(email) => { setuserEmail(email) }}
                         textContentType='emailAddress'
                         placeholderTextColor={"#E5E7EB"}
@@ -235,10 +236,10 @@ const SignInForm = ({ onSwitch }) => {
 
             {/*  //! REMEMBER and FORGET PASS */}
             <View style={styles.rememberForgotContainer}>
-                <View style={{ flexDirection: "row", gap: 8 }}>
+                {/* <View style={{ flexDirection: "row", gap: 8 }}>
                     <ExpoCheckbox color={"#4F46E5"} value={checked} onValueChange={() => setchecked(!checked)} />
                     <Text style={{ color: "#B4B4B4FF" }}>Remember me</Text>
-                </View>
+                </View> */}
                 <TouchableOpacity onPress={() => { forgotPass(userEmail) }}>
                     <Text style={{ color: "#B4B4B4FF" }}>Forgot Password?</Text></TouchableOpacity>
             </View>
@@ -297,7 +298,6 @@ const styles = StyleSheet.create({
         backgroundColor: "#0C122259",
         height: height,
         borderRadius: 20,
-
     },
     formTxt: {
         fontSize: 18,
@@ -327,7 +327,7 @@ const styles = StyleSheet.create({
 
     rememberForgotContainer: {
         flexDirection: "row",
-        justifyContent: "space-between",
+        justifyContent: "flex-end",
         paddingRight: 20,
         paddingLeft: 20,
         marginTop: 12
