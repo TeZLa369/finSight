@@ -1,11 +1,12 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
-import SignUp from './screens/SignUp';
 import SignIn from './screens/SignIn';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { ToastProvider } from 'react-native-toast-notifications';
-import SignUpForm from './components/SignUpForm';
 import Home from './screens/Home';
+import MoneyDetails from './screens/GroupName';
+import SplitScreens from './screens/SplitScreens';
+import AddExpenses from './screens/AddExpenses';
 
 
 export default function App() {
@@ -16,7 +17,8 @@ export default function App() {
         duration={2000}
         offset={50}>
         <StatusBar style='light' />
-        <Home />
+        <AddExpenses />
+        {/* <MoneyDetails /> */}
       </ToastProvider>
     </SafeAreaProvider>
 
